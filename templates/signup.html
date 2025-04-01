@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='public/css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='public/css/media.css') }}">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ffffff;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #333;
+            padding: 10px 20px;
+            color: #fff;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .navbar a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+        }
+
+        .navbar a:hover {
+            background-color: #575757;
+            border-radius: 5px;
+        }
+
+        .navbar .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .navbar .logo .app-name {
+            font-weight: bold;
+            color: orange;
+        }
+
+        .signup-container {
+            background-color: #ffffff;
+            padding: 40px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-top: 20px;
+        }
+        .signup-container:hover {
+            transform: scale(1.05);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        .signup-container h2 {
+            margin-bottom: 20px;
+            color: #ff6347;
+            font-size: 28px;
+        }
+        .signup-container .input-icon {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        .signup-container .input-icon input {
+            width: 100%;
+            padding: 15px;
+            padding-left: 45px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 30px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        .signup-container .input-icon .icon {
+            position: absolute;
+            top: 50%;
+            left: 15px;
+            transform: translateY(-50%);
+            font-size: 18px;
+            color: #aaa;
+        }
+        .signup-container button {
+            width: 100%;
+            padding: 15px;
+            background-color: #ff6347;
+            color: #fff;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        .signup-container button:hover {
+            background-color: #e5533d;
+            transform: translateY(-2px);
+        }
+        .signup-container .signin {
+            display: block;
+            margin-top: 20px;
+            color: #ff6347;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .signup-container .signin:hover {
+            text-decoration: underline;
+        }
+        .flash-message {
+            margin-bottom: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .flash-message.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .flash-message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                padding: 10px;
+            }
+
+            .navbar .logo {
+                margin-bottom: 10px;
+            }
+
+            .navbar a {
+                padding: 10px;
+                font-size: 14px;
+            }
+
+            .signup-container {
+                padding: 30px;
+                margin-top: 15px;
+            }
+
+            .signup-container h2 {
+                font-size: 24px;
+            }
+
+            .signup-container .input-icon input {
+                padding: 12px;
+                padding-left: 40px;
+            }
+
+            .signup-container button {
+                padding: 12px;
+                font-size: 14px;
+            }
+
+            .signup-container .signin {
+                font-size: 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar {
+                padding: 5px;
+            }
+
+            .navbar .logo img {
+                height: 30px;
+                margin-right: 5px;
+            }
+
+            .navbar a {
+                padding: 8px;
+                font-size: 12px;
+            }
+
+            .signup-container {
+                padding: 20px;
+                margin-top: 10px;
+            }
+
+            .signup-container h2 {
+                font-size: 20px;
+            }
+
+            .signup-container .input-icon input {
+                padding: 10px;
+                padding-left: 35px;
+            }
+
+            .signup-container button {
+                padding: 10px;
+                font-size: 12px;
+            }
+
+            .signup-container .signin {
+                font-size: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <div class="navbar">
+        <div class="logo">
+            <img src="{{ url_for('static', filename='images/3112512.jpg') }}" alt="App Logo">
+            <span class="app-name">Artists</span>
+        </div>
+        <a href="{{ url_for('index') }}" class="home-link"><i class="fas fa-home"></i></a>
+    </div>
+
+    <div class="signup-container">
+        <h2>Sign Up</h2>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="flash-message {{ category }}">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+        <form method="POST">
+            <div class="input-icon">
+                <i class="fas fa-envelope icon"></i>
+                <input type="email" name="email" placeholder="Email" required>
+            </div>
+            <div class="input-icon">
+                <i class="fas fa-lock icon"></i>
+                <input type="password" name="password" placeholder="Password" required>
+            </div>
+            <button type="submit">Sign Up</button>
+        </form>
+        <a class="signin" href="{{ url_for('signin') }}">Already have an account? Click here!</a>
+    </div>
+</body>
+</html>

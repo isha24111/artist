@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Artist Profile</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <link rel="stylesheet" href="{{ url_for('static', filename='public/css/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='public/css/media.css') }}">
+  <style>
+  /* Custom styles */
+  html, body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+    color: #333;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+  }
+
+  body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    margin-top: 70px; /* Added to create space for the fixed navbar */
+  }
+
+  .navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #333;
+    padding: 10px 20px;
+    color: #fff;
+    width: 100%;
+    box-sizing: border-box;
+    position: fixed;
+    top: 0;
+    z-index: 1000;
+  }
+
+  .navbar a {
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 20px;
+  }
+
+  .navbar a:hover {
+    background-color: #575757;
+    border-radius: 5px;
+  }
+
+  .navbar .logo {
+    display: flex;
+    align-items: center;
+  }
+
+  .navbar .logo img {
+    height: 40px;
+    margin-right: 10px;
+  }
+
+  .navbar .logo .app-name {
+    font-weight: bold;
+    color: orange;
+  }
+
+  .profile-container {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    width: 100%;
+    margin-top: 20px; /* Adjusted margin to provide space below the navbar */
+    text-align: center;
+  }
+
+  .profile-details {
+    margin-bottom: 20px;
+  }
+
+  .profile-picture {
+    border-radius: 50%;
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    margin-bottom: 15px;
+  }
+
+  .profile-details h1 {
+    font-size: 24px;
+    color: #ff6347;
+    margin-bottom: 10px;
+  }
+
+  .profile-details p {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 20px;
+    white-space: pre-wrap; /* Ensure line breaks are preserved */
+  }
+
+  .photos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    grid-gap: 10px;
+  }
+
+  .photo-item {
+    width: 150px;
+    height: 150px;
+    overflow: hidden;
+  }
+
+  .photo-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+    transition: transform 0.3s ease;
+  }
+
+  .photo-item img:hover {
+    transform: scale(1.05);
+  }
+
+  /* User Circle Styles */
+  #user-circle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #ff6347;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  #user-circle img {
+    width: 100%;
+    height: auto;
+    border-radius: 50%;
+  }
+
+  #user-circle span {
+    font-size: 20px;
+    color: #ffffff;
+  }
+
+  .dropdown-menu {
+    display: none;
+    position: fixed;
+    top: 70px;
+    right: 20px;
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    z-index: 1;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .dropdown-menu a {
+    display: block;
+    padding: 10px;
+    color: #333;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+  }
+
+  .dropdown-menu a:hover {
+    background-color: #f0f0f0;
+  }
+
+  /* Modal Styles */
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+    padding-top: 60px;
+  }
+
+  .modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 700px;
+    border-radius: 10px;
+  }
+
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .modal-image {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+  }
+
+  @media (max-width: 768px) {
+    .navbar {
+      flex-direction: column;
+      padding: 10px;
+    }
+
+    .navbar .logo {
+      margin-bottom: 10px;
+    }
+
+    .navbar a {
+      padding: 10px;
+      font-size: 14px;
+    }
+
+    .profile-container {
+      padding: 15px;
+      margin-top: 15px;
+    }
+
+    .profile-details h1 {
+      font-size: 20px;
+    }
+
+    .profile-details p {
+      font-size: 14px;
+    }
+
+    .photos-grid {
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    }
+
+    .photo-item {
+      width: 100px;
+      height: 100px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .navbar {
+      padding: 5px;
+    }
+
+    .navbar .logo img {
+      height: 30px;
+      margin-right: 5px;
+    }
+
+    .navbar a {
+      padding: 8px;
+      font-size: 12px;
+    }
+
+    .profile-container {
+      padding: 10px;
+      margin-top: 10px;
+    }
+
+    .profile-details h1 {
+      font-size: 18px;
+    }
+
+    .profile-details p {
+      font-size: 12px;
+    }
+
+    .photos-grid {
+      grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    }
+
+    .photo-item {
+      width: 80px;
+      height: 80px;
+    }
+
+    #user-circle {
+      width: 30px;
+      height: 30px;
+    }
+
+    #user-circle span {
+      font-size: 16px;
+    }
+  }
+</style>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <div class="navbar">
+    <div class="logo">
+      <img src="{{ url_for('static', filename='images/3112512.jpg') }}" alt="App Logo">
+      <span class="app-name">Artists</span>
+    </div>
+    <a href="{{ url_for('index') }}" class="home-link"><i class="fas fa-home"></i></a>
+  </div>
+
+  <!-- User Circle -->
+  <div id="user-circle" onclick="toggleDropdown()">
+    {% if 'user' in session %}
+      {% if user_profile and user_profile.get('profile_picture') %}
+        <img src="{{ user_profile.get('profile_picture') }}" alt="Profile Picture">
+      {% else %}
+        <span>{{ session['user']['email'][0] }}</span>
+      {% endif %}
+    {% endif %}
+  </div>
+
+  <!-- Dropdown menu -->
+  <div class="dropdown-menu" id="dropdown-menu">
+    <a href="/profile">Profile</a>
+    <a href="/logout">Sign Out</a>
+  </div>
+
+  <div class="profile-container">
+    <div class="profile-details">
+      {% if user_data.profile_picture %}
+        <img src="{{ user_data.profile_picture }}" alt="Profile Picture" class="profile-picture">
+      {% endif %}
+      <h1>{{ user_data.name }}</h1>
+      <p>{{ user_data.description }}</p>
+    </div>
+    <div class="photos-grid">
+      {% for photo in user_data.photos %}
+        <div class="photo-item">
+          <img src="{{ photo }}" alt="Photo" onclick="openPhotoModal('{{ photo }}')">
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Modal Structure -->
+  <div id="photoModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closePhotoModal()">&times;</span>
+      <img id="modalImage" class="modal-image" src="" alt="Highlighted Photo">
+    </div>
+  </div>
+
+  <script>
+    function toggleDropdown() {
+      var dropdownMenu = document.getElementById('dropdown-menu');
+      dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+    }
+
+    window.onclick = function(event) {
+      if (!event.target.closest('#user-circle')) {
+        var dropdowns = document.getElementsByClassName('dropdown-menu');
+        for (var i = 0; i < dropdowns.length; i++) {
+          var openDropdown = dropdowns[i];
+          if (openDropdown.style.display === 'block') {
+            openDropdown.style.display = 'none';
+          }
+        }
+      }
+    }
+
+    function openPhotoModal(photoUrl) {
+      var modal = document.getElementById('photoModal');
+      var modalImage = document.getElementById('modalImage');
+      modalImage.src = photoUrl;
+      modal.style.display = 'block';
+    }
+
+    function closePhotoModal() {
+      var modal = document.getElementById('photoModal');
+      modal.style.display = 'none';
+    }
+  </script>
+</body>
+</html>

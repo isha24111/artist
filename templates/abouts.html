@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us - Artists</title>
+  <link rel="shortcut icon" href="./images/title-logo.png" type="image/x-icon">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f9f9f9;
+      color: #333;
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: #333;
+      padding: 10px 20px;
+      color: #fff;
+      width: 100%;
+      box-sizing: border-box;
+      position: fixed;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .navbar a {
+      color: #fff;
+      text-decoration: none;
+      padding: 10px 20px;
+    }
+
+    .navbar a:hover {
+      background-color: #575757;
+      border-radius: 5px;
+    }
+
+    .navbar .logo {
+      display: flex;
+      align-items: center;
+    }
+
+    .navbar .logo img {
+      height: 40px;
+      margin-right: 10px;
+    }
+
+    .navbar .logo .app-name {
+      font-weight: bold;
+      color: orange;
+    }
+
+    header {
+      background-color: #000;
+      color: #fff;
+      padding: 20px 0;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      margin-top: 60px; /* Space for fixed navbar */
+      width: 100%;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 36px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 0 20px;
+      box-sizing: border-box;
+    }
+
+    .about-section {
+      background-color: #fff;
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .about-section h2 {
+      text-align: center;
+      color: #ff6347;
+      font-size: 28px;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+    }
+
+    .about-section p {
+      font-size: 18px;
+      color: #555;
+      line-height: 1.8;
+      margin-bottom: 20px;
+    }
+
+    .about-section .highlight {
+      color: #ff6347;
+      font-weight: bold;
+    }
+
+    .contact-section {
+      background-color: #f7f7f7;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .contact-section h3 {
+      color: #333;
+      font-size: 22px;
+      margin-bottom: 10px;
+    }
+
+    .contact-section p {
+      font-size: 18px;
+      color: #666;
+      margin-bottom: 20px;
+    }
+
+    .contact-section a {
+      color: #ff6347;
+      text-decoration: none;
+      font-size: 18px;
+      display: inline-block;
+      margin-top: 10px;
+      padding: 10px 20px;
+      border: 1px solid #ff6347;
+      border-radius: 5px;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .contact-section a:hover {
+      background-color: #ff6347;
+      color: #fff;
+    }
+
+    footer {
+      background-color: #000;
+      color: #fff;
+      text-align: center;
+      padding: 20px 0;
+      margin-top: 40px;
+      width: 100%;
+    }
+
+    footer p {
+      margin: 0;
+    }
+
+    @media (max-width: 768px) {
+      .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .navbar a {
+        padding: 10px;
+        font-size: 14px;
+      }
+
+      header h1 {
+        font-size: 28px;
+      }
+
+      .container {
+        padding: 0 10px;
+      }
+
+      .about-section {
+        padding: 20px;
+      }
+
+      .about-section h2 {
+        font-size: 24px;
+      }
+
+      .about-section p {
+        font-size: 16px;
+      }
+
+      .contact-section {
+        padding: 15px;
+      }
+
+      .contact-section h3 {
+        font-size: 20px;
+      }
+
+      .contact-section p {
+        font-size: 16px;
+      }
+
+      .contact-section a {
+        padding: 8px 15px;
+        font-size: 16px;
+      }
+
+      footer {
+        padding: 15px 0;
+      }
+
+      footer p {
+        font-size: 14px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .navbar a {
+        padding: 8px;
+        font-size: 12px;
+      }
+
+      header h1 {
+        font-size: 24px;
+      }
+
+      .container {
+        padding: 0 5px;
+      }
+
+      .about-section {
+        padding: 15px;
+      }
+
+      .about-section h2 {
+        font-size: 20px;
+      }
+
+      .about-section p {
+        font-size: 14px;
+      }
+
+      .contact-section {
+        padding: 10px;
+      }
+
+      .contact-section h3 {
+        font-size: 18px;
+      }
+
+      .contact-section p {
+        font-size: 14px;
+      }
+
+      .contact-section a {
+        padding: 6px 10px;
+        font-size: 14px;
+      }
+
+      footer {
+        padding: 10px 0;
+      }
+
+      footer p {
+        font-size: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <div class="navbar">
+    <div class="logo">
+      <img src="{{ url_for('static', filename='images/3112512.jpg') }}" alt="App Logo">
+      <span class="app-name">Artists</span>
+    </div>
+    <a href="{{ url_for('index') }}" class="home-link"><i class="fas fa-home"></i></a>
+  </div>
+
+  <header>
+    <h1>About Us</h1>
+  </header>
+
+  <div class="container">
+    <div class="about-section">
+      <h2>Our Concept</h2>
+      <p>
+        Welcome to <span class="highlight">Artists</span>, a platform designed to empower creators to showcase their talents and connect with art enthusiasts from around the globe. We believe in the power of art to inspire, transform, and bring people together.
+      </p>
+      <p>
+        Whether you're a painter, sculptor, photographer, or digital artist, <span class="highlight">Artists</span> provides a space for you to share your work, find inspiration, and grow your audience. Our mission is to create a vibrant community where creativity flourishes and new talents are discovered.
+      </p>
+      <p>
+        Join us today and be part of a community that celebrates artistic expression and fosters meaningful connections between artists and art lovers. Ready to embark on your creative journey? <span class="highlight">Sign up now and let your art shine!</span>
+      </p>
+    </div>
+    <div class="contact-section">
+      <h3>Contact Us</h3>
+      <p>If you have any questions or need further information, feel free to reach out to us at:</p>
+      <a href="mailto:ishayash414@gmail.com">support@artists.com</a>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2024 Artists. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>

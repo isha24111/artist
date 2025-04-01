@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="{{ url_for('static', filename='public/css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='public/css/media.css') }}">
+    <style>
+        /* Custom Styles for Profile Page */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Custom Styles for Navigation Bar */
+        .navbar {
+            display: flex;
+            align-items: center;
+            background-color: #333;
+            padding: 10px 20px;
+            color: #fff;
+            width: 100%;
+            box-sizing: border-box;
+            justify-content: space-between;
+        }
+
+        .navbar a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+        }
+
+        .navbar a:hover {
+            background-color: #575757;
+            border-radius: 5px;
+        }
+
+        .navbar .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .navbar .logo .app-name {
+            font-weight: bold;
+            color: orange;
+        }
+
+        .profile-header {
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+            border-radius: 10px;
+            margin: 20px auto;
+            max-width: 600px;
+            width: 90%;
+        }
+
+        .empty-profile-picture, .profile-picture {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background-color: #ccc;
+            margin-bottom: 15px;
+            border: 5px solid #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+        }
+
+        .profile-picture {
+            object-fit: cover;
+        }
+
+        .profile-name {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 0;
+        }
+
+        .profile-description {
+            font-size: 16px;
+            color: #666;
+            margin-top: 0;
+            margin-bottom: 0;
+            white-space: pre-line;
+        }
+
+        .edit-profile-button, .upload-photos-button {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin-top: 0;
+            margin-bottom: 0;
+            transition: background-color 0.3s ease;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .edit-profile-button {
+            background-color: #ff6347;
+            color: #fff;
+        }
+
+        .edit-profile-button:hover {
+            background-color: #ff7f50;
+        }
+
+        .upload-photos-button {
+            background-color: #007bff;
+            color: #fff;
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+
+        .upload-photos-button:hover {
+            background-color: #0056b3;
+        }
+
+        h2 {
+            color: #333;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 28px;
+        }
+
+        .photos-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .photo-item {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            margin: 10px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .photo-item:hover {
+            transform: scale(1.1);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 600px;
+        }
+
+        .modal img {
+            max-width: 100%;
+            max-height: 80vh;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 20px;
+            color: #999;
+            cursor: pointer;
+        }
+
+        .back-button, .delete-button {
+            display: block;
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .delete-button {
+            background-color: #dc3545;
+            margin-top: 10px;
+        }
+
+        .delete-button:hover {
+            background-color: #c82333;
+        }
+
+        .back-button:hover {
+            background-color: #0056b3;
+        }
+
+        .row {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        #user-circle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #ccc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        #user-circle img {
+            width: 100%;
+            height: auto;
+            border-radius: 50%;
+        }
+
+        #user-circle span {
+            font-size: 20px;
+            color: #fff;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 60px;
+            right: 0;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            z-index: 1;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 10px;
+            color: #333;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: #f0f0f0;
+        }
+
+        @media (max-width: 768px) {
+            .navbar .logo {
+                margin-right: auto;
+            }
+
+            .navbar a {
+                padding: 10px;
+                font-size: 14px;
+            }
+
+            .profile-header {
+                margin: 10px auto;
+                padding: 10px;
+            }
+
+            .profile-picture, .empty-profile-picture {
+                width: 120px;
+                height: 120px;
+            }
+
+            .profile-name {
+                font-size: 20px;
+            }
+
+            .profile-description {
+                font-size: 14px;
+            }
+
+            .edit-profile-button, .upload-photos-button {
+                padding: 8px 16px;
+                font-size: 14px;
+            }
+
+            h2 {
+                font-size: 24px;
+            }
+
+            .photo-item {
+                width: 150px;
+                height: 150px;
+                margin: 5px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .navbar a {
+                padding: 8px;
+                font-size: 12px;
+            }
+
+            .profile-header {
+                padding: 10px;
+            }
+
+            .profile-picture, .empty-profile-picture {
+                width: 100px;
+                height: 100px;
+            }
+
+            .profile-name {
+                font-size: 18px;
+            }
+
+            .profile-description {
+                font-size: 12px;
+            }
+
+            .edit-profile-button, .upload-photos-button {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+
+            h2 {
+                font-size: 20px;
+            }
+
+            .photo-item {
+                width: 120px;
+                height: 120px;
+                margin: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <div class="navbar">
+        <div class="logo">
+            <img src="{{ url_for('static', filename='images/3112512.jpg') }}" alt="App Logo">
+            <span class="app-name">Artists</span>
+        </div>
+        <a href="{{ url_for('index') }}" class="home-link"><i class="fas fa-home"></i> Home</a>
+    </div>
+
+    <!-- User Circle -->
+    <div id="user-circle">
+        {% if 'user' in session %}
+            {% if user_profile and user_profile.get('profile_picture') %}
+                <img src="{{ user_profile.get('profile_picture') }}" alt="Profile Picture">
+            {% else %}
+                <span>{{ session['user'][0] if 'user' in session else '' }}</span>
+            {% endif %}
+        {% endif %}
+    </div>
+
+    <!-- Dropdown menu -->
+    <div class="dropdown-menu" id="dropdown-menu">
+        <a href="/profile">Profile</a>
+        <a href="/logout">Sign Out</a>
+    </div>
+
+    <!-- Profile Header -->
+    <div class="profile-header">
+        <!-- Display Profile Picture -->
+        {% if user_profile and user_profile.get('profile_picture') %}
+            <img class="profile-picture" src="{{ user_profile.get('profile_picture') }}" alt="Profile Picture">
+        {% else %}
+            <div class="empty-profile-picture"></div>
+        {% endif %}
+
+        <!-- Display Name -->
+        <div class="profile-name">
+            {% if user_profile %}
+                {{ user_profile.get('name', '') }}
+            {% else %}
+                Name:
+            {% endif %}
+        </div>
+
+        <!-- Display Description -->
+        <div class="profile-description">
+            {% if user_profile %}
+                {{ user_profile.get('description', '') }}
+            {% else %}
+                Description:
+            {% endif %}
+        </div>
+
+        <!-- Edit Profile Button -->
+        <a class="edit-profile-button" href="{{ url_for('edit_profile') }}">Edit Profile</a>
+
+        <!-- Upload Photos Button -->
+        <a class="upload-photos-button" href="{{ url_for('upload_photos_page') }}">Upload Photos</a>
+    </div>
+
+    <!-- Display Uploaded Photos -->
+    {% if user_profile and user_profile.get('photos') %}
+        <h2>My Photos</h2>
+        <div class="photos-grid">
+            {% for photo_url in user_profile.get('photos', []) %}
+                <div class="photo-item-container">
+                    <img class="photo-item" src="{{ photo_url }}" onclick="openModal('{{ photo_url }}')">
+                </div>
+                {% if loop.index % 5 == 0 %}
+                    </div><div class="photos-grid">
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="modal">
+        <span class="close" onclick="closeModal()">x</span>
+        <img class="modal-image" src="" alt="Modal Image">
+        <div class="button-container">
+            <button class="back-button" onclick="closeModal()">Back</button>
+            <button class="delete-button" onclick="deletePhoto()">Delete</button>
+        </div>
+    </div>
+
+    <script>
+        let currentPhotoUrl = '';
+
+        function openModal(url) {
+            var modal = document.querySelector('.modal');
+            var modalImage = modal.querySelector('.modal-image');
+
+            modalImage.src = url;
+
+            currentPhotoUrl = url;
+
+            modal.style.display = "block";
+        }
+
+        function closeModal() {
+            var modal = document.querySelector('.modal');
+            modal.style.display = "none";
+        }
+
+        function deletePhoto() {
+            if (currentPhotoUrl) {
+                fetch('/delete-photo', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ photo_url: currentPhotoUrl })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Photo deleted successfully');
+                        window.location.reload();
+                    } else {
+                        alert('Failed to delete photo: ' + (data.error || 'Unknown error'));
+                    }
+                })
+                .catch(error => {
+                    console.error('Error deleting photo:', error);
+                    alert('Failed to delete photo: ' + error.message);
+                });
+            } else {
+                alert('No photo selected for deletion.');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const userCircle = document.getElementById('user-circle');
+            const dropdownMenu = document.getElementById('dropdown-menu');
+
+            userCircle.addEventListener('click', function() {
+                if (dropdownMenu.style.display === 'block') {
+                    dropdownMenu.style.display = 'none';
+                } else {
+                    dropdownMenu.style.display = 'block';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

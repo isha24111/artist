@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='public/css/media.css') }}"> <!-- Include main website styles -->
+    <style>
+        /* Custom Styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #333;
+            padding: 10px 20px;
+            color: #fff;
+            width: 100%;
+            box-sizing: border-box;
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+        }
+
+        .navbar a:hover {
+            background-color: #575757;
+            border-radius: 5px;
+        }
+
+        .navbar .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .navbar .logo .app-name {
+            font-weight: bold;
+            color: orange;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 36px;
+            color: #ff6347;
+            margin: 80px 0 20px; /* Adjusted margin to create space for fixed navbar */
+        }
+
+        .result-container {
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            margin-top: 20px; /* Adjusted margin to create space below the heading */
+        }
+
+        p {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .no-results {
+            color: #e74c3c;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <div class="navbar">
+        <div class="logo">
+            <img src="{{ url_for('static', filename='images/3112512.jpg') }}" alt="App Logo">
+            <span class="app-name">Artists</span>
+        </div>
+        <a href="{{ url_for('index') }}" class="home-link"><i class="fas fa-home"></i></a>
+    </div>
+
+    <h1>Search Results</h1>
+    <div class="result-container">
+        {% if artist_data %}
+            <p><strong>Email:</strong> {{ artist_data.email }}</p>
+            <p><strong>Name:</strong> {{ artist_data.name }}</p>
+            <p><strong>Description:</strong> {{ artist_data.description }}</p>
+        {% else %}
+            <p class="no-results">No artist found with the provided email.</p>
+        {% endif %}
+    </div>
+</body>
+</html>
